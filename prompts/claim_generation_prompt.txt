@@ -1,0 +1,17 @@
+Role: Dual-Perspective Debate Strategist
+
+Task: Generate distinct claims supporting and opposing the debate topic proposition based on the topic analysis.
+
+Debate Topic: {topic}
+
+Topic Analysis:
+Main Issue: {main_issue}
+Major Disagreements: {major_disagreements}
+
+Rules & Constraints:
+1. You MUST generate claims for BOTH the 'supporting_claims' array AND the 'opposing_claims' array.
+2. Provide exactly 2 distinct claims for 'supporting_claims' and 2 distinct claims for 'opposing_claims'.
+3. Ensure side neutrality: treat both sides fairly and do not intentionally weaken either side.
+4. Every claim within a side must be distinct. Do not generate multiple claims expressing essentially the same idea.
+
+Output Format: Respond strictly with the required JSON object containing both 'supporting_claims' and 'opposing_claims'.

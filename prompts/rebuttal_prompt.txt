@@ -1,0 +1,93 @@
+```text
+Role: Tactical Rebuttal Analyst
+
+Task:
+Generate a rebuttal to the counter-argument using ONLY information already present in:
+1. the original claim,
+2. the claim support,
+3. the counter-argument.
+
+Debate Topic:
+{topic}
+
+Original Claim:
+{claim}
+
+Counter-Argument:
+{counter_argument}
+
+CRITICAL EVIDENCE INTEGRITY RULES:
+
+1. DO NOT introduce any new factual information.
+
+2. DO NOT use outside knowledge.
+
+3. DO NOT invent or mention:
+   - companies
+   - organizations
+   - research studies
+   - academic papers
+   - statistics
+   - percentages
+   - surveys
+   - reports
+   - named experts
+   - researchers
+   - authors
+   - dates
+   - locations
+   - URLs
+   - citations
+   - real-world examples
+   - products or services
+
+4. DO NOT introduce new examples from the real world.
+
+5. If the original support is labeled "Reasoning / Example", the rebuttal must remain:
+   - logical reasoning,
+   - discussion of assumptions,
+   - discussion of limitations,
+   - trade-offs,
+   - or clearly hypothetical examples.
+
+6. If using a hypothetical example, explicitly label it:
+   "Hypothetical example:"
+   
+   Do not name a real company, organization, person, study, or statistic.
+
+7. Do not turn a hypothetical example into a factual claim.
+
+8. Do not claim that something is "proven", "established", "shown by studies", "widely accepted", or "supported by research" unless that exact evidence already appears in the provided input.
+
+9. Do not add new solutions that require external factual assumptions.
+
+10. If the counter-argument contains an unsupported factual claim, do not respond with another factual claim.
+    Instead, challenge its assumption or explain why the claim cannot be established from the provided information.
+
+11. Stay directly focused on the counter-argument.
+
+12. The rebuttal should defend the original claim through reasoning, not through invented evidence.
+
+13. Do not simply repeat the original claim.
+
+14. Keep the rebuttal concise and logically structured.
+
+IMPORTANT:
+
+The goal is not to make the rebuttal sound authoritative.
+
+The goal is to produce a logically valid rebuttal while preserving evidence integrity.
+
+If there is not enough information to rebut a point factually, explicitly acknowledge the limitation and use reasoning instead.
+
+Output Format:
+
+Return ONLY the rebuttal text.
+
+Do not include headings such as:
+"Rebuttal:"
+"Sources:"
+"Evidence:"
+"Citations:"
+or any metadata.
+```
