@@ -24,11 +24,6 @@ from chains.debate_summary import get_debate_summary_chain
 
 load_dotenv()
 
-
-# ============================================================
-# GROQ LLM
-# ============================================================
-
 def get_llm():
     """
     Create and return the Groq LLM.
@@ -46,11 +41,6 @@ def get_llm():
         temperature=0.2,
         api_key=groq_api_key
     )
-
-
-# ============================================================
-# POLITICAL TOPIC DETECTION
-# ============================================================
 
 def _is_political_or_partisan_topic(topic: str) -> bool:
     """
@@ -104,10 +94,6 @@ def _is_political_or_partisan_topic(topic: str) -> bool:
     )
 
 
-# ============================================================
-# TEXT SIZE CONTROL
-# ============================================================
-
 def _shorten_text(text: str, max_chars: int) -> str:
     """
     Shorten long generated text before sending it to another
@@ -127,10 +113,6 @@ def _shorten_text(text: str, max_chars: int) -> str:
     return text[:max_chars] + "... [truncated]"
 
 
-# ============================================================
-# DEBATE PIPELINE
-# ============================================================
-
 class DebatePipeline:
 
     def __init__(self, llm=None):
@@ -143,10 +125,6 @@ class DebatePipeline:
 
         self.llm = llm or get_llm()
 
-    # ========================================================
-    # FULL PIPELINE
-    # ========================================================
-
     def run_full_pipeline(self, topic: str):
 
         if not topic or not topic.strip():
@@ -155,10 +133,6 @@ class DebatePipeline:
             )
 
         topic = topic.strip()
-
-        # ====================================================
-        # PHASE 1: TOPIC ANALYSIS
-        # ====================================================
 
         print("\n" + "=" * 60)
         print("PHASE 1: TOPIC ANALYSIS")
@@ -181,10 +155,6 @@ class DebatePipeline:
 
         time.sleep(1)
 
-        # ====================================================
-        # PHASE 2: CLAIM GENERATION
-        # ====================================================
-
         print("\n" + "=" * 60)
         print("PHASE 2: CLAIM GENERATION")
         print("=" * 60)
@@ -193,9 +163,6 @@ class DebatePipeline:
             self.llm
         )
 
-        # IMPORTANT:
-        # Claim generation requires both topic and main_issue.
-        # main_issue comes from Phase 1.
 
         claim_result = claim_chain.invoke(
             {
@@ -223,10 +190,6 @@ class DebatePipeline:
             print("-", claim)
 
         time.sleep(1)
-
-        # ====================================================
-        # PHASE 3: EVIDENCE + COUNTER + REBUTTAL
-        # ====================================================
 
         print("\n" + "=" * 60)
         print(
@@ -256,10 +219,6 @@ class DebatePipeline:
 
         opposing_args: List[DebateArgument] = []
 
-        # ====================================================
-        # SUPPORTING ARGUMENTS
-        # ====================================================
-
         for index, claim in enumerate(
             supporting_claims[:2],
             start=1
@@ -268,10 +227,6 @@ class DebatePipeline:
             print(
                 f"\nSupporting Argument {index}"
             )
-
-            # ------------------------------------------------
-            # Evidence / Reasoning
-            # ------------------------------------------------
 
             evidence = evidence_chain.invoke(
                 {
@@ -286,10 +241,6 @@ class DebatePipeline:
             print("\nSupport:")
             print(evidence.content)
 
-            # ------------------------------------------------
-            # Counter Argument
-            # ------------------------------------------------
-
             counter_argument = counter_chain.invoke(
                 {
                     "topic": topic,
@@ -301,9 +252,6 @@ class DebatePipeline:
             print("\nCounter-Argument:")
             print(counter_argument)
 
-            # ------------------------------------------------
-            # Rebuttal
-            # ------------------------------------------------
 
             rebuttal = rebuttal_chain.invoke(
                 {
@@ -315,10 +263,6 @@ class DebatePipeline:
 
             print("\nRebuttal:")
             print(rebuttal)
-
-            # ------------------------------------------------
-            # Store Argument
-            # ------------------------------------------------
 
             supporting_args.append(
                 DebateArgument(
@@ -333,10 +277,6 @@ class DebatePipeline:
 
             time.sleep(1)
 
-        # ====================================================
-        # OPPOSING ARGUMENTS
-        # ====================================================
-
         for index, claim in enumerate(
             opposing_claims[:2],
             start=1
@@ -345,10 +285,6 @@ class DebatePipeline:
             print(
                 f"\nOpposing Argument {index}"
             )
-
-            # ------------------------------------------------
-            # Evidence / Reasoning
-            # ------------------------------------------------
 
             evidence = evidence_chain.invoke(
                 {
@@ -363,10 +299,6 @@ class DebatePipeline:
             print("\nSupport:")
             print(evidence.content)
 
-            # ------------------------------------------------
-            # Counter Argument
-            # ------------------------------------------------
-
             counter_argument = counter_chain.invoke(
                 {
                     "topic": topic,
@@ -378,10 +310,6 @@ class DebatePipeline:
             print("\nCounter-Argument:")
             print(counter_argument)
 
-            # ------------------------------------------------
-            # Rebuttal
-            # ------------------------------------------------
-
             rebuttal = rebuttal_chain.invoke(
                 {
                     "topic": topic,
@@ -392,10 +320,6 @@ class DebatePipeline:
 
             print("\nRebuttal:")
             print(rebuttal)
-
-            # ------------------------------------------------
-            # Store Argument
-            # ------------------------------------------------
 
             opposing_args.append(
                 DebateArgument(
@@ -409,10 +333,6 @@ class DebatePipeline:
             )
 
             time.sleep(1)
-
-        # ====================================================
-        # PHASE 4: COMPACT SUMMARY INPUT
-        # ====================================================
 
         print("\n" + "=" * 60)
         print("PREPARING COMPACT DEBATE SUMMARY INPUT")
@@ -474,10 +394,6 @@ Rebuttal:
             opposing_summary_parts
         )
 
-        # ====================================================
-        # PHASE 4A: NEUTRAL ANALYSIS
-        # ====================================================
-
         print("\n" + "=" * 60)
         print("PHASE 4A: NEUTRAL ANALYSIS")
         print("=" * 60)
@@ -503,9 +419,6 @@ Rebuttal:
 
         time.sleep(1)
 
-        # ====================================================
-        # PHASE 4B: STRUCTURED DEBATE SUMMARY
-        # ====================================================
 
         print("\n" + "=" * 60)
         print("PHASE 4B: STRUCTURED DEBATE SUMMARY")
@@ -527,9 +440,6 @@ Rebuttal:
             )
         )
 
-        # ====================================================
-        # POLITICAL / PARTISAN SAFETY
-        # ====================================================
 
         if _is_political_or_partisan_topic(topic):
 
@@ -538,9 +448,6 @@ Rebuttal:
         print("\nStructured Summary:")
         print(summary)
 
-        # ====================================================
-        # FINAL RESULT
-        # ====================================================
 
         result = {
             "topic": topic,
@@ -571,10 +478,6 @@ Rebuttal:
 
         return result
 
-
-# ============================================================
-# DIRECT FILE TEST
-# ============================================================
 
 if __name__ == "__main__":
 
